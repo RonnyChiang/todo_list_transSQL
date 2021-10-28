@@ -18,6 +18,7 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
+app.use(express.urlencoded({ extended: true }))
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
@@ -28,6 +29,18 @@ app.get('/', (req, res) => {
     .then(todos => res.render('index', { todos })) // 將資料傳給 index 樣板
     .catch(error => console.error(error)) // 錯誤處理
 })
+
+app.get('/todos/new', (req, res) => {
+  return res.render('new')
+})
+
+app.post('/todos', (req, res) => {
+  const name = req.body.name       // 從 req.body 拿出表單裡的 name 資料
+  return Todo.create({ name })     // 存入資料庫
+    .then(() => res.redirect('/')) // 新增完成後導回首頁
+    .catch(error => console.log(error))
+})
+
 
 // 設定 port 3000
 app.listen(3000, () => {
