@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/todo-list')
+
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/todo-list'
+
+mongoose.connect(MONGODB_URI)
 
 // 取得資料庫連線狀態
 const db = mongoose.connection
