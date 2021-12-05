@@ -3,6 +3,8 @@ const express = require('express')
 const exphbs = require('express-handlebars');
 // 載入 method-override
 const methodOverride = require('method-override')
+// 載入session
+const session = require('express-session')
 // 引用路由器
 const routes = require('./routes')
 
@@ -18,6 +20,12 @@ app.set('view engine', 'hbs')
 // 設定每一筆請求都會透過 methodOverride 進行前置處理
 app.use(methodOverride('_method'))
 
+// set session
+app.use(session({
+  secret: 'ThisIsMySecret',
+  resave: false,
+  saveUninitialized: true
+}))
 // 將 request 導入路由器
 app.use(routes)
 
