@@ -42,5 +42,10 @@ router.post('/register', (req, res) => {
 
   })
 })
+
+router.get('/logout', (req, res) => {
+  req.logout()
+  res.redirect('/users/login')
+})
 // 匯出路由模組
 module.exports = router
