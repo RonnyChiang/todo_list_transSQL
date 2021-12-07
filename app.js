@@ -8,6 +8,7 @@ const session = require('express-session')
 // 引用路由器
 const routes = require('./routes')
 
+const usePassport = require('./config/passport')
 require('./config/mongoose')
 
 const app = express()
@@ -26,6 +27,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+
+// passport
+usePassport(app)
 // 將 request 導入路由器
 app.use(routes)
 
