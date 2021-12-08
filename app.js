@@ -30,6 +30,14 @@ app.use(session({
 
 // passport
 usePassport(app)
+
+//auth
+app.use((req, res, next) => {
+  console.log(req.user)
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user
+  next()
+})
 // 將 request 導入路由器
 app.use(routes)
 
