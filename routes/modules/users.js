@@ -13,7 +13,11 @@ router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/users/login',
   failureFlash: true
-}))
+}),
+  (req, res) => {
+    res.render('/users/login', { messages: req.flash('error') })
+  }
+)
 
 router.get('/register', (req, res) => {
   res.render('register')
