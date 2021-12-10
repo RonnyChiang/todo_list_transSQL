@@ -13,11 +13,8 @@ router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/users/login',
   failureFlash: true
-}),
-  (req, res) => {
-    res.render('/users/login', { messages: req.flash('error') })
-  }
-)
+}))
+
 
 router.get('/register', (req, res) => {
   res.render('register')
@@ -26,16 +23,16 @@ router.get('/register', (req, res) => {
 router.post('/register', (req, res) => {
   const { name, email, password, confirmPassword } = req.body
   // check error
-  const error = []
+  const errors = []
   if (!name || !email || !password || !confirmPassword) {
-    error.push({ message: '所有欄位都是必須填寫的!' })
+    errors.push({ message: '所有欄位都是必須填寫的!' })
   }
   if (password !== confirmPassword) {
-    error.push({ message: '密碼與確認密碼不符!' })
+    errors.push({ message: '密碼與確認密碼不符!' })
   }
-  if (error.length) {
+  if (errors.length) {
     return res.render('register', {
-      error,
+      errors,
       name,
       email,
       password,
@@ -45,9 +42,9 @@ router.post('/register', (req, res) => {
   // find existed email
   User.findOne({ email }).then(user => {
     if (user) {
-      error.push({ message: '這個 Email 已經註冊過了!' })
+      errors.push({ message: '這個 Email 已經註冊過了!' })
       return res.render('register', {
-        error,
+        errors,
         name,
         email,
         password,
