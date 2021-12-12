@@ -7,6 +7,9 @@ const methodOverride = require('method-override')
 const session = require('express-session')
 // 載入flash
 const flash = require('connect-flash')
+
+require('dotenv').config()
+
 // 引用路由器
 const routes = require('./routes')
 
@@ -14,7 +17,7 @@ const usePassport = require('./config/passport')
 require('./config/mongoose')
 
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT
 
 app.use(express.urlencoded({ extended: true }))
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
@@ -25,7 +28,7 @@ app.use(methodOverride('_method'))
 
 // set session
 app.use(session({
-  secret: 'ThisIsMySecret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }))
