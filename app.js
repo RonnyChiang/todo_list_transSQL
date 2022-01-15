@@ -14,7 +14,11 @@ require('dotenv').config()
 const routes = require('./routes')
 
 const usePassport = require('./config/passport')
-require('./config/mongoose')
+
+// MySQL
+const db = require('./models')
+const Todo = db.Todo
+const User = db.User
 
 const app = express()
 const PORT = process.env.PORT

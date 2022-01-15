@@ -1,7 +1,11 @@
 // 引用 Express 與 Express 路由器
 const express = require('express')
 const router = express.Router()
-const User = require('../../models/user')
+
+const db = require('../../models')
+const Todo = db.Todo
+const User = db.User
+
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
 
@@ -41,7 +45,7 @@ router.post('/register', (req, res) => {
     })
   }
   // find existed email
-  User.findOne({ email }).then(user => {
+  User.findOne({ where: { email } }).then(user => {
     if (user) {
       errors.push({ message: '這個 Email 已經註冊過了!' })
       return res.render('register', {

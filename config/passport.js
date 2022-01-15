@@ -3,7 +3,9 @@ const LocalStrategy = require('passport-local').Strategy
 const FacebookStrategy = require('passport-facebook').Strategy
 const bcrypt = require('bcryptjs')
 
-const User = require('../models/user')
+const db = require('../models')
+const Todo = db.Todo
+const User = db.User
 
 module.exports = app => {
   // init
@@ -15,7 +17,7 @@ module.exports = app => {
     usernameField: 'email',
     passReqToCallback: true
   }, (req, email, password, done) => {
-    User.findOne({ email })
+    User.findOne({ where: { email } })
       .then(user => {
         if (!user) {
           return done(null, false, req.flash("loginError_msg", 'That email is not registered!'))
@@ -39,7 +41,7 @@ module.exports = app => {
   },
     (accessToken, refreshToken, profile, done) => {
       const { name, email } = profile._json
-      User.findOne({ email })
+      User.findOne({ where: { email } })
         .then(user => {
           if (user) return done(null, user)
 
@@ -64,9 +66,11 @@ module.exports = app => {
     done(null, user.id)
   })
   passport.deserializeUser((id, done) => {
-    User.findById(id)
-      .lean()
-      .then(user => done(null, user))
+    User.findByPk(id)
+      .then(user => {
+        user = user.toJSON()
+        done(null, user)
+      })
       .catch(err => done(err, null))
   })
 }
